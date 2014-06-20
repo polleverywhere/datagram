@@ -1,5 +1,6 @@
 #! /bin/bash
 
+# Build script to compile Hamlet templates
 cd lib/datagram/public/templates
 
 for file in *.haml; do
@@ -13,3 +14,4 @@ for file in *.js; do
 done
 
 cat *.js > ../templates.js
+rm *.js
