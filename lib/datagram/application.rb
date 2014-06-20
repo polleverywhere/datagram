@@ -126,6 +126,10 @@ module Datagram
       sass :style
     end
 
+    get "/editor.js" do
+      coffee :editor
+    end
+
     get "/results.js" do
       coffee :results
     end

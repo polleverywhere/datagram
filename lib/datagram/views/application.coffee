@@ -1,39 +1,19 @@
-configureEditor = (selector, mode) ->
-  editor = ace.edit(selector)
-  editor.setTheme "ace/theme/tomorrow"
-  editor.setShowPrintMargin(false)
-  editor.renderer.setShowGutter(false)
+sqlEditor = Editor
+  selector: "sql-editor"
+  mode: "sql"
 
-  session = editor.session
-  session.setMode "ace/mode/#{mode}"
-  session.setTabSize(2)
-  session.setUseSoftTabs(true)
-  session.setUseWrapMode(true)
-  session.setWrapLimitRange(null, null)
-
-  editor
-
-sqlEditor = configureEditor("sql-editor", "sql")
-javascriptEditor = configureEditor("javascript-editor", "javascript")
+javascriptEditor = Editor
+  selector: "javascript-editor"
+  mode: "javascript"
 
 $ ->
   window.enableEditor = ->
     if activeQuery().locked()
-      sqlEditor.setReadOnly true
-      sqlEditor.setTheme null
-      sqlEditor.session.setMode null
-
-      javascriptEditor.setReadOnly true
-      javascriptEditor.setTheme null
-      javascriptEditor.session.setMode null
+      sqlEditor.disable()
+      javascriptEditor.disable()
     else
-      sqlEditor.setReadOnly false
-      sqlEditor.setTheme "ace/theme/tomorrow"
-      sqlEditor.session.setMode "ace/mode/sql"
-
-      javascriptEditor.setReadOnly false
-      javascriptEditor.setTheme "ace/theme/tomorrow"
-      javascriptEditor.session.setMode "ace/mode/javascript"
+      sqlEditor.enable()
+      javascriptEditor.enable()
 
   hideErrorMessages = ->
     error("")
@@ -74,29 +54,19 @@ $ ->
     enableEditor()
 
   window.resetEditorSql = (sql) ->
-    sqlEditor.removeListener "change", setActiveQuerySql
-
-    sqlEditor.setValue(sql, 1)
-    sqlEditor.getSession().setUndoManager(new ace.UndoManager)
-
-    sqlEditor.on("change", setActiveQuerySql)
+    sqlEditor.reset(sql, setActiveQuerySql)
 
   window.resetEditorFilter = (filter) ->
-    javascriptEditor.removeListener "change", setActiveQueryFilter
-
-    javascriptEditor.setValue(filter, 1)
-    javascriptEditor.getSession().setUndoManager(new ace.UndoManager)
-
-    javascriptEditor.on("change", setActiveQueryFilter)
+    javascriptEditor.reset(filter, setActiveQueryFilter)
 
   setActiveQuerySql = ->
-    activeQuery().content(sqlEditor.getValue())
+    activeQuery().content(sqlEditor.value())
 
   setActiveQueryFilter = ->
-    activeQuery().filter(javascriptEditor.getValue())
+    activeQuery().filter(javascriptEditor.value())
 
-  sqlEditor.on "change", setActiveQuerySql
-  javascriptEditor.on "change", setActiveQueryFilter
+  sqlEditor.change setActiveQuerySql
+  javascriptEditor.change setActiveQueryFilter
 
   $.getJSON("/schema").done (data) ->
     $("#schema").template "schema",
