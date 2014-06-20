@@ -9,9 +9,9 @@ gem "coffee-script"
 gem "json"
 gem "thor"
 gem "sqlite3"
+gem "mysql2"
+gem "thin"
 
 group :development do
-  gem "thin"
-  gem "mysql2"
   gem "pry"
 end

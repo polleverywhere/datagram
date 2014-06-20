@@ -2,73 +2,76 @@
 
 Gist for SQL Queries.
 
-## Installation
+## About
 
-Datagram is a rack app that requires database migrations to get working. The application works with two datebases:
+Datagram is an application running as a [Docker][docker] container. It requires a host running [Docker][docker] (or boot2docker on Mac), a query storage database (a SQLite file on the Datagram container or other database), and read-only access of your database to run the queries against.
 
-* `QUERY_DATABASE_URL` - The database that Datagram stores queries that people write.
-* `REPORTING_DATABASE_URL` - The database that Datagram runs queriest against. *Make sure this is being accessed via a read-only database account*
+## Usage
 
-### Install the gem
+Datagram is build as a [Docker][docker] container and can run on any host supporting [Docker][docker]. In the following example, we will install boot2docker to run this on a Mac host.
 
-Add this line to your application's Gemfile:
+### Prerequisites
 
-    gem 'datagram'
+* [Docker][docker] installed on a host (see installation instructions for your specific host):
+  * Mac - https://docs.docker.com/installation/mac/
+  * Ubuntu - https://docs.docker.com/installation/ubuntulinux/
+  * Others - https://docs.docker.com/installation/
+* Access to a database to report against
+* Creation of a query database to store saved queries
 
-And then execute:
+### Configuration
 
-    $ bundle
+Datagram is configured by two environment variables:
 
-Or install it yourself as:
+* `QUERY_DATABASE_URL` - The database that Datagram stores user written queries.
+* `REPORTING_DATABASE_URL` - The database that Datagram runs queries against. *Make sure this is being accessed via a read-only database account*
 
-    $ gem install datagram
+These can be passed on the command line while running Datagram or as an environment file (such as `datagram.env`). An example `datagram.env` may look like:
 
-### Create the query database and migrate to the most recent schema
+    QUERY_DATABASE_URL=sqlite:///datagram/storage/query_database.db
+    REPORTING_DATABASE_URL=mysql2://readonly:mypassword@database.mydomain.com/database_name
 
-Datagram stores queries in a Sqlite3 database by default. To setup the database run:
+### Running
 
-```sh
-$ datagram migrate
-```
+In this example, we will run two containers. One will be the storage for the query database and the other will be Datagram itself.
 
-and the Sqlite3 database will be created and/or updated. To change the location of the database, change the `QUERY_DATABASE_URL` variable like:
+  # Run the data container
+  docker run -v /datagram/storage -d --name datagram-data ubuntu /bin/true
 
-```sh
-$ QUERY_DATABASE_URL=mysql://127.0.0.1:5000/ datagram migrate
-```
+  # Create the SQLite file that matches the `QUERY_DATABASE_URL` location
+  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram touch /datagram/storage/query_database.db
 
-### Create a rackup file
+  # Run the Datagram SQL migrations
+  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram datagram migrate
 
-Datagram is a rack application. To start using, create a rackup file like:
+  # Run Datagram on default port 5000
+  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data -p 5000:5000 -d --name datagram polleverywhere/datagram
 
-```ruby
-require 'datagram'
+You should now be able to visit datagram at your Docker host IP via port 5000. You can get the IP address of your boot2docker VM using `boot2docker ip`.
 
-# The app we've all been waitin for!
-run Datagram::App.new
-```
+## Development
 
-Refer to the [`config.ru`](./config.ru) for a development environment friendly version of this configuration.
+When developing on Datagram locally, you can run the application from Foreman without needing to build the application repeatedly in Docker.
 
-### Run the server
+### Configuration
 
-Now its time to run the server. Configuration happens via environmental variables that is documented in this projects [`.env`](./.env) file.
+Your local development environment should be configured using a `.env` file. You can copy the `.env.sample` file to `.env` and edit it according to your environment.
 
-```sh
-$ QUERY_DATABASE_URL=sqlite://datagram.db \
-  REPORTING_DATABASE_URL=mysql2://read-only-user:password@127.0.0.1/my-database \
-  rackup config.ru
-```
+### Running
 
-Now visit the website and you should be ready to write some queries!
+Run the application with Foreman:
+
+    bundle exec foreman start
+
+Now visit Datagram at http://localhost:5000 and you should be ready to write some queries!
 
 ## Security
 
 Datagram makes no assumptions about security, so make sure you do the following in a production environment:
 
 1. Make sure the `REPORTING_DATABASE_URL` database is using an account with read-only permissions. You don't want users accidentally deleting data! Your database administrator should be able to set this.
-2. Its highly recommended that you only make datagram accessible via https. Transfering your database content over the wire in the clear is not a good idea.
-3. Datagram provides no authentication or authorizaiton services. The easiest way to implement a username and password is via HTTP Basic authorization through either a rack middleware or web server configuration over HTTPS.
+2. Its highly recommended that you only make datagram accessible via HTTPS. Transfering your database content over the wire in the clear is not a good idea. We recommend running Datagram behind a load balancer or proxy that supports SSL.
+3. Datagram provides no authentication or authorizaiton services. The easiest way to implement a username and password is via HTTP Basic authorization through either a rack middleware (building a new Docker image based on this one) or in the proxy configuration over HTTPS.
 
 You've been warned!
 
@@ -79,3 +82,5 @@ You've been warned!
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+[docker]: http://www.docker.com/
