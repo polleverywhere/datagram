@@ -172,10 +172,10 @@ window.Query = (I={}) ->
 
     self.activate()
 
-  Query.create = ->
-    $.ajax
-      type: "POST"
-      url: "/queries"
-      dataType: "json"
-
   self
+
+Query.create = ->
+  $.ajax
+    type: "POST"
+    url: "/queries"
+    dataType: "json"

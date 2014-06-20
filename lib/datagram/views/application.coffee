@@ -44,14 +44,16 @@ $ ->
         folder.expanded(true) if folder.id() is -1
 
   activeQuery.observe (q) ->
-    history?.pushState?({}, "#{q.name()}", "/queries/#{q.id()}")
+    # guard against someone deleting all queries
+    if q
+      history?.pushState?({}, "#{q.name()}", "/queries/#{q.id()}")
 
-    expandParentFolder(q)
+      expandParentFolder(q)
 
-    resetEditorSql(q.content())
-    resetEditorFilter(q.filter())
+      resetEditorSql(q.content())
+      resetEditorFilter(q.filter())
 
-    enableEditor()
+      enableEditor()
 
   window.resetEditorSql = (sql) ->
     sqlEditor.reset(sql, setActiveQuerySql)
@@ -68,6 +70,19 @@ $ ->
   sqlEditor.change setActiveQuerySql
   javascriptEditor.change setActiveQueryFilter
 
+  createQuery = ->
+    Query.create().done (json) ->
+      # TODO clean this up
+      ungrouped = null
+      folders.forEach (folder) ->
+        ungrouped = folder if folder.id() is -1
+
+      json.folder = ungrouped.I
+      query = Query(json)
+
+      ungrouped.queries.push(query)
+      activeQuery(query)
+
   $.getJSON("/schema").done (data) ->
     $("#schema").template "schema",
       schema: ([tableName, columns] for tableName, columns of data)
@@ -76,6 +91,12 @@ $ ->
 
   $.getJSON("/folders").done (data) ->
     folders(data.map(Folder))
+
+    count = 0
+    folders.forEach (f) ->
+      count += f.queries().length
+
+    createQuery() unless count
 
     if (id = parseInt(location.pathname.replace("/queries/", "")))
       activateQuery(id)
@@ -194,14 +215,4 @@ $ ->
           folders.push(folder)
 
     newQuery: ->
-      Query.create().done (json) ->
-        # TODO clean this up
-        ungrouped = null
-        folders.forEach (folder) ->
-          ungrouped = folder if folder.id() is -1
-
-        json.folder = ungrouped.I
-        query = Query(json)
-
-        ungrouped.queries.push(query)
-        activeQuery(query)
+      createQuery()
