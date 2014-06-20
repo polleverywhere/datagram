@@ -1,0 +1,38 @@
+- folders = @folders
+- deleteQuery = @delete
+
+%nav.file-tree
+  %ul.queries
+    - each @folders, ->
+      %ul.folder(class=@classes.expanded)
+        %i.icon-trash.icon(click=@destroy)
+        %h4.folder-name(click=@toggle)
+          %i.icon-folder-close.icon
+          %i.icon-folder-open.icon
+          =@text.nameAndCount
+        - each @queries, ->
+          %li.query(click=@activate class=@classes.active)
+            %i.icon.icon-file(class=@classes.hideWhenActive)
+            .query-name(class=@classes.showTitle)=@name
+            %label(class=@classes.editTitle)
+              .name Name
+              %input.edit-query-name(disabled=@disabled value=@name)
+            .status
+              .icon-circle-blank(title=@text.unsaved class=@classes.unsaved)
+              .icon-spinner.icon-spin(title=@text.saving class=@classes.saving)
+              .icon-ok-circle(title=@text.saved class=@classes.saved)
+            .settings
+              %label
+                .name Description
+                %textarea.description(disabled=@disabled placeholder=@text.description value=@description)
+              %label.locked.inline
+                %span.name Lock this query?
+                %input(type="checkbox" click=@lock checked=@locked)
+              %p.explanation Locked queries cannot be modified.
+              %label.move-to-folder
+                .name Folder
+                %select(value=@folder disabled=@disabled options=folders)
+              %label
+                .btn.btn-default.btn-delete.wide(class=@classes.disabled click=deleteQuery)
+                  %i.icon-trash
+                  %span Delete Query

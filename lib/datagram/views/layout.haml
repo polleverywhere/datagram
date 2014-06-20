@@ -1,0 +1,19 @@
+:ruby
+  stylesheets = %w(bootstrap font-awesome style)
+  scripts = %w(
+    jquery
+    hamlet_runtime templates
+    ace/ace ace/theme-tomorrow ace/mode-sql ace/mode-javascript
+    folder query results application
+  )
+
+!!!
+%html
+  %head
+    %title Datagram
+    - stylesheets.each do |s|
+      %link(href="/#{s}.css" rel="stylesheet" type="text/css")
+  %body
+    = yield
+    - scripts.each do |s|
+      %script(src="/#{s}.js" type="text/javascript" charset="utf-8")

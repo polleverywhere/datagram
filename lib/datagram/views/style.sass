@@ -1,0 +1,404 @@
+$editor-height: 250px
+$editor-width: 50%
+
+$file-tree-width: 15%
+
+$red: #D13030
+$dark-red: #3E2E2E
+
+$header-height: 48px
+
+*, *:before, *:after
+  box-sizing: border-box !important
+
+.datagram
+  input[type="checkbox"]
+    margin: 0
+    margin-left: 6px
+    vertical-align: top
+
+  input, textarea
+    border: 1px solid #aaa
+
+  input[disabled], textarea[disabled]
+    background-color: #FFF
+    border: 1px solid #FFF
+    color: $dark-red
+    cursor: not-allowed
+
+.icon-trash
+  padding-right: 7px
+
+.folder
+  > .icon-trash
+    position: absolute
+    right: 0
+    display: none
+
+.explanation
+  font-size: 10px
+  margin-top: -10px
+
+label
+  width: 100%
+  margin-bottom: 0
+  vertical-align: top
+
+  &.inline
+    height: 22px
+
+  .icon-lock
+    float: left
+
+  .name
+    font-size: 12px
+    font-weight: bold
+    margin: 0
+    padding: 0
+    vertical-align: top
+
+.datagram.flex, .datagram.flex main, header
+  display: flex
+
+.datagram.flex
+  flex-direction: column
+  flex: 1
+
+  main
+    border-left: 1px solid $dark-red
+    flex: 1
+    flex-flow: row wrap
+    align-content: flex-start
+
+  #queries
+    min-width: 200px
+    flex: 0 0 $file-tree-width
+    overflow-y: auto
+
+// override bootstrap
+.table th
+  border: 1px solid #DDD
+
+@media (max-width: 767px)
+  // override bootstrap
+  body
+    padding: 0
+
+@media (min-width: 768px)
+  .datagram.flex
+    flex-direction: row
+
+html
+  height: 100%
+
+body
+  font-family: Helvetica, sans-serif
+  min-height: 100%
+  max-height: 100%
+  display: flex
+  flex-direction: column
+
+  .btn
+    color: $dark-red
+
+  ul
+    list-style: none
+
+.display-none
+  display: none !important
+
+.queries
+  .status
+    color: $dark-red
+
+  .icon-circle-blank, .icon-spinner, .icon-ok-circle
+    display: none
+    position: absolute
+    top: 28px
+    right: 7px
+
+  .icon-circle-blank.unsaved
+    display: inline-block
+
+  .icon-spinner.saving
+    display: inline-block
+
+  .icon-ok-circle.saved
+    display: inline-block
+
+  .icon-lock
+    cursor: pointer
+    opacity: 0.4
+
+    &.locked
+      opacity: 1
+
+.query-spinner
+  position: absolute
+  top: 0
+  right: 0
+  left: 15%
+  bottom: 0
+  margin: auto
+  background-color: #DEDEDE
+  height: 35px
+  width: 220px
+  padding: 0.5em 1em
+  border: 1px solid rgba(0, 0, 0, 0.2)
+  z-index: 99999
+
+  .text
+    margin-right: 0.5em
+
+  .icon-spinner
+    display: inline-block
+
+.edit-query-name
+  width: 100%
+  margin-bottom: 0.25em
+  padding-right: 24px
+
+.error-message
+  font-weight: bold
+  position: absolute
+  top: 50%
+  left: 0
+  right: 0
+  margin: auto
+  width: 500px
+  background-color: #feee75
+  border: 1px solid black
+  border-radius: 3px
+  padding: 1em
+  z-index: 5000000
+
+  .icon-remove
+    cursor: pointer
+    position: absolute
+    top: 0
+    right: 8px
+    bottom: 0
+    margin: auto
+    height: 14px
+
+section.results, #results
+  min-width: 100%
+
+#results
+  display: flex
+  overflow: scroll
+
+  .header
+    align-items: center
+    display: flex
+    padding: 0.5em
+    height: 48px
+
+  h3
+    display: flex
+    flex: 1
+    margin: 0
+
+  .report
+    flex: 1
+    justify-content: flex-end
+    display: flex
+
+.schema
+  color: hsl(0, 100%, 100%)
+  display: block !important
+  visibility: visible !important
+  position: absolute
+  top: $header-height
+  left: 0
+  z-index: 1002
+  overflow-x: hidden
+  -webkit-transition: -webkit-transform .2s ease-in-out
+  -webkit-transform: scale(1)
+
+  .columns
+    overflow-y: scroll
+
+  &.hidden
+    -webkit-transform: scale(0)
+
+.count
+  #results
+    padding-right: 0.5em
+
+.columns
+  -webkit-column-width: 13em
+  -webkit-column-gap: 2em
+  padding: 1em
+
+  .database-table
+    display: inline-block
+    margin: 0 1em 1em 0
+
+    .table-name
+      margin: 0
+
+    ul
+      padding: 0
+
+    li
+      font-style: italic
+      margin-left: 0.5em
+
+#queries, .schema
+  background-color: $dark-red
+
+.file-tree
+  overflow-y: auto
+
+  .title
+    color: white
+    text-align: center
+    padding-top: 14px
+    padding-bottom: 14px
+    margin: 0
+
+.file-tree
+  color: white
+  z-index: 1000
+
+  .query
+    overflow: hidden
+
+  .icon-file
+    position: absolute
+    left: 0
+    top: 4px
+
+  .query-name
+    padding-left: 32px
+    white-space: nowrap
+    overflow-x: hidden
+    text-overflow: ellipsis
+    max-width: 100%
+
+  .status, .query-name
+    display: inline-block
+
+  .queries
+    margin-left: 0
+    padding-left: 0
+
+  textarea
+    width: 100%
+    font-weight: normal
+    resize: none
+
+  .folder
+    cursor: pointer
+    font-size: 20px
+    padding: 0
+    position: relative
+
+    &:hover
+      .icon-trash
+        display: inline-block
+
+    .query
+      display: none
+
+    .icon-folder-close
+      display: inline-block
+
+    .icon-folder-open
+      display: none
+
+    &.expanded
+      .query
+        display: block
+
+      .icon-folder-close
+        display: none
+
+      .icon-folder-open
+        display: inline-block
+
+  .query, .folder-name
+    .icon
+      width: 24px
+      height: 24px
+      margin-left: 5px
+
+  .folder-name
+    margin: 0.25em 0
+
+  .query
+    padding: 0
+    font-size: 18px
+    cursor: pointer
+    position: relative
+
+    .settings
+      display: none
+
+    &.active
+      padding: 5px
+      background-color: white
+      color: #333
+
+      .settings
+        display: block
+
+#sql-editor
+  border-right: 1px solid $dark-red
+
+#sql-editor, #javascript-editor
+  border-bottom: 1px solid $dark-red
+  width: $editor-width
+  height: $editor-height
+
+header
+  background-color: $red
+  align-items: center
+  padding: 0.5em
+  z-index: 1003
+  height: $header-height
+
+  .btn-group>.btn i
+    font-size: 22px
+
+  #title
+    font-weight: normal
+    display: flex
+    flex: 1
+
+    .title
+      width: 100%
+      text-align: center
+
+    h2.name
+      color: white
+      font-size: 24px
+      margin: auto
+      display: inline-block
+
+  #actions, #commands
+    display: flex
+    flex: 0.5
+
+  // override bootstrap
+  .btn-group+.btn-group
+    margin-left: 0
+
+  #commands
+    justify-content: flex-end
+
+  #actions
+    justify-content: flex-start
+
+.btn.disabled
+  cursor: not-allowed
+
+.wide
+  width: 100%
+
+.move-to-folder
+  margin-bottom: 16px
+
+select
+  width: 100%

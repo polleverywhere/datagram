@@ -1,0 +1,8 @@
+.schema(class=@class)
+  .columns
+    - each @schema, (data) ->
+      .database-table
+        %h4.table-name= data[0]
+        %ul.table-columns
+          - each data[1], (col) ->
+            %li= col

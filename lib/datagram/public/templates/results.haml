@@ -1,0 +1,24 @@
+%section.results
+  .header
+    %h3 Results
+    .results-counts
+      .sql-results(class=@classes.sql)
+        .count
+          %span.results=@sqlCount
+          SQL results returned
+      .filter-results(class=@classes.filter)
+        .count
+          %span.results=@filterCount
+          results after applying JavaScript filter
+    %a.btn.btn-default.download(class=@classes.download href=@downloadPath title='Download query results')
+      %i.icon-download-alt
+  .query-results
+    %table.table.table-striped.results
+      %thead
+        - each @columns, (col) ->
+          %th= col
+      %tbody
+        - each @rows, (row) ->
+          %tr
+            - each Object.keys(row), (key) ->
+              %td= row[key]
