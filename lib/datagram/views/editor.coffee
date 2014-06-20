@@ -21,7 +21,7 @@ window.Editor = (I={}) ->
       editor.setTheme "ace/theme/tomorrow"
       session.setMode "ace/mode/#{I.mode}"
     reset: (value, changeFn) ->
-      editor.remove "change", changeFn
+      editor.removeListener "change", changeFn
       editor.setValue value, 1
       editor.getSession().setUndoManager(new ace.UndoManager)
       editor.on "change", changeFn
