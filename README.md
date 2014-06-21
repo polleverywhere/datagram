@@ -1,10 +1,12 @@
 # Datagram
 
-Gist for SQL Queries.
+Datagram is Gist for SQL. Quickly recall saved queries and transform results using JavaScript.
+
+![Alt text](https://s3.amazonaws.com/uploads.hipchat.com/62638/564879/GGYbQ5Ioucq9i4H/upload.png "Datagram screenshot")
 
 ## About
 
-Datagram is an application running as a [Docker][docker] container. It requires a host running [Docker][docker] (or boot2docker on Mac), a query storage database (a SQLite file on the Datagram container or other database), and read-only access of your database to run the queries against.
+Datagram runs as a [Docker][docker] container. It requires a host running [Docker][docker] (or boot2docker on Mac), a query storage database (a SQLite file on the Datagram container or other database), and read-only access of your database to run the queries against.
 
 ## Usage
 
