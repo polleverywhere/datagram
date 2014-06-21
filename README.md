@@ -10,7 +10,7 @@ Datagram runs as a [Docker][docker] container. It requires a host running [Docke
 
 ## Usage
 
-Datagram is build as a [Docker][docker] container and can run on any host supporting [Docker][docker]. In the following example, we will install boot2docker to run this on a Mac host.
+Datagram is built as a [Docker][docker] container and can run on any host supporting [Docker][docker]. In the following example, we will install boot2docker to run this on a Mac host.
 
 ### Prerequisites
 
@@ -38,16 +38,16 @@ These can be passed on the command line while running Datagram or as an environm
 In this example, we will run two containers. One will be the storage for the query database and the other will be Datagram itself.
 
   # Run the data container
-  docker run -v /datagram/storage -d --name datagram-data ubuntu /bin/true
+  `docker run -v /datagram/storage -d --name datagram-data ubuntu /bin/true`
 
   # Create the SQLite file that matches the `QUERY_DATABASE_URL` location
-  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram touch /datagram/storage/query_database.db
+  `docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram touch /datagram/storage/query_database.db`
 
   # Run the Datagram SQL migrations
-  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram datagram migrate
+  `docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram datagram migrate`
 
   # Run Datagram on default port 5000
-  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data -p 5000:5000 -d --name datagram polleverywhere/datagram
+  `docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data -p 5000:5000 -d --name datagram polleverywhere/datagram`
 
 You should now be able to visit datagram at your Docker host IP via port 5000. You can get the IP address of your boot2docker VM using `boot2docker ip`.
 
