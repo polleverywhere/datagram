@@ -38,16 +38,24 @@ These can be passed on the command line while running Datagram or as an environm
 In this example, we will run two containers. One will be the storage for the query database and the other will be Datagram itself.
 
   # Run the data container
-  `docker run -v /datagram/storage -d --name datagram-data ubuntu /bin/true`
+  ```sh
+  docker run -v /datagram/storage -d --name datagram-data ubuntu /bin/true
+  ```
 
   # Create the SQLite file that matches the `QUERY_DATABASE_URL` location
-  `docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram touch /datagram/storage/query_database.db`
+  ```sh
+  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram touch /datagram/storage/query_database.db
+  ```
 
   # Run the Datagram SQL migrations
-  `docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram datagram migrate`
+  ```sh
+  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data --rm polleverywhere/datagram datagram migrate
+  ```
 
   # Run Datagram on default port 5000
-  `docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data -p 5000:5000 -d --name datagram polleverywhere/datagram`
+  ```sh
+  docker run --env-file $(pwd)/datagram.env --volumes-from datagram-data -p 5000:5000 -d --name datagram polleverywhere/datagram
+  ```
 
 You should now be able to visit datagram at your Docker host IP via port 5000. You can get the IP address of your boot2docker VM using `boot2docker ip`.
 
