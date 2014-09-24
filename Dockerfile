@@ -12,7 +12,6 @@ RUN apt-get update -q \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD ./Gemfile /datagram/Gemfile
-ADD ./Gemfile.lock /datagram/Gemfile.lock
 
 RUN bundle install \
   --without development test \
