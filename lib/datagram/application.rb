@@ -1,3 +1,5 @@
+require 'sass'
+require 'compass'
 require 'coffee-script'
 require 'sinatra'
 require 'sequel'
@@ -120,10 +122,9 @@ module Datagram
       @ds.to_csv
     end
 
-    # assets
     get '/style.css' do
       content_type 'text/css', :charset => 'utf-8'
-      sass :style
+      sass :style, Compass.sass_engine_options
     end
 
     get "/editor.js" do

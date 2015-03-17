@@ -1,3 +1,5 @@
+@import "compass/css3"
+
 $editor-height: 250px
 $editor-width: 50%
 
@@ -58,21 +60,21 @@ label
     vertical-align: top
 
 .datagram.flex, .datagram.flex main, header
-  display: flex
+  +display-flex()
 
 .datagram.flex
-  flex-direction: column
-  flex: 1
+  +flex-direction(column)
+  +flex(1)
 
   main
     border-left: 1px solid $dark-red
-    flex: 1
-    flex-flow: row wrap
+    +flex(1)
+    +flex-flow(row wrap)
     align-content: flex-start
 
   #queries
     min-width: 200px
-    flex: 0 0 $file-tree-width
+    +flex(0 0 $file-tree-width)
     overflow-y: auto
 
 // override bootstrap
@@ -86,7 +88,7 @@ label
 
 @media (min-width: 768px)
   .datagram.flex
-    flex-direction: row
+    +flex-direction(row)
 
 html
   height: 100%
@@ -94,8 +96,8 @@ html
 body
   font-family: Helvetica, sans-serif
   min-height: 100%
-  display: flex
-  flex-direction: column
+  +display-flex()
+  +flex-direction(column)
 
   .btn
     color: $dark-red
@@ -184,24 +186,24 @@ section.results, #results
   min-width: 100%
 
 #results
-  display: flex
+  +display-flex()
   overflow: scroll
 
   .header
     align-items: center
-    display: flex
+    +display-flex()
     padding: 0.5em
     height: 48px
 
   h3
-    display: flex
-    flex: 1
+    +display-flex()
+    +flex(1)
     margin: 0
 
   .report
-    flex: 1
+    +flex(1)
     justify-content: flex-end
-    display: flex
+    +display-flex()
 
 .schema
   color: hsl(0, 100%, 100%)
@@ -363,8 +365,8 @@ header
 
   #title
     font-weight: normal
-    display: flex
-    flex: 1
+    +display-flex()
+    +flex(1)
 
     .title
       width: 100%
@@ -377,7 +379,7 @@ header
       display: inline-block
 
   #actions, #commands
-    display: flex
+    +display-flex()
     flex: 0.5
 
   // override bootstrap
